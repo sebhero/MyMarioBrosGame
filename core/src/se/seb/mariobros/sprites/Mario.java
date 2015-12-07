@@ -224,6 +224,7 @@ public class Mario extends Sprite {
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / MarioBros.PPM);
 
+
         //what the mario is
         fdef.filter.categoryBits = MarioBros.MARIO_BIT;
         //what he can collide with

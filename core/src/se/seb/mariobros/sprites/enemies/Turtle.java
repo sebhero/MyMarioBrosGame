@@ -1,5 +1,6 @@
 package se.seb.mariobros.sprites.enemies;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -88,9 +89,11 @@ public class Turtle extends Enemy {
         if (currentState != State.STANDING_SHELL) {
             currentState = State.STANDING_SHELL;
             velocity.x =0;
+            MarioBros.manager.get("audio/sound/stomp.wav", Sound.class).play();
         }
         else {
             kick(mario.getX() <= this.getX()? KICK_RIGHT : KICK_LEFT );
+            MarioBros.manager.get("audio/sound/stomp.wav", Sound.class).play();
         }
 
     }
