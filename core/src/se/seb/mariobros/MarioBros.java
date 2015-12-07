@@ -1,13 +1,9 @@
 package se.seb.mariobros;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import se.seb.mariobros.screens.PlayScreen;
 
@@ -19,7 +15,7 @@ public class MarioBros extends Game {
     public static final int  V_HEIGHT = 208;
     public static final  float PPM = 100;
 
-
+    public static final short NOTHING_BIT = 0;
     public static final short GROUND_BIT = 1;
     public static final short MARIO_BIT = 2;
     public static final short BRICK_BIT= 4;

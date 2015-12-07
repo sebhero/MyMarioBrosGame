@@ -59,7 +59,7 @@ public class PlayScreen implements Screen {
 
     public PlayScreen(MarioBros game) {
 
-        atlas = new TextureAtlas("./newsprite/Mario_and_enemies.pack");
+        atlas = new TextureAtlas("Mario_and_enemies.pack");
         this.game = game;
         gameCam = new OrthographicCamera();
 //        gamePort = new StretchViewport(800, 400, gameCam);
@@ -105,8 +105,11 @@ public class PlayScreen implements Screen {
         world.step(1/60f, 6, 2);
 
         player.update(dt);
-        for (Enemy enemy : creator.getGoombas()) {
+        for (Enemy enemy : creator.getEnemies()) {
             enemy.update(dt);
+            if (enemy.getX() < player.getX() + 224 / MarioBros.PPM) {
+                enemy.b2body.setActive(true);
+            }
         }
 
         for (Item item : items) {
@@ -117,25 +120,29 @@ public class PlayScreen implements Screen {
         hud.update(dt);
 
         //attach our gamecam to our players.x coords
-        gameCam.position.x = player.b2body.getPosition().x;
+        if(player.currentState != Mario.State.DEAD)
+            gameCam.position.x = player.b2body.getPosition().x;
 
         gameCam.update();
         renderer.setView(gameCam);
     }
 
     private void handleInput(float dt) {
+        if (player.currentState == Mario.State.DEAD) {
+            return;
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-            player.b2body.applyLinearImpulse(new Vector2(0,4f),player.b2body.getWorldCenter(),true);
+            player.b2body.applyLinearImpulse(new Vector2(0, 4f), player.b2body.getWorldCenter(), true);
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && (player.b2body.getLinearVelocity().x <= 2)) {
-            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0),player.b2body.getWorldCenter(),true);
+            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
         }
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && (player.b2body.getLinearVelocity().x >= -2)) {
-            player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0),player.b2body.getWorldCenter(),true);
+            player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
         }
         if (Gdx.input.isTouched()) {
-            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0),player.b2body.getWorldCenter(),true);
+            player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
         }
     }
 
@@ -163,7 +170,7 @@ public class PlayScreen implements Screen {
         //draw mario
         game.batch.setProjectionMatrix(gameCam.combined);
         game.batch.begin();
-            for (Enemy enemy : creator.getGoombas()) {
+            for (Enemy enemy : creator.getEnemies()) {
                 enemy.draw(game.batch);
                 //14*16 / ppm when ur 14 bricks away activate goomba
                 if (enemy.getX() < player.getX() + 224 / MarioBros.PPM) {
@@ -171,6 +178,7 @@ public class PlayScreen implements Screen {
                     enemy.b2body.setActive(true);
                 }
             }
+
             for (Item item : items) {
                 item.draw(game.batch);
             }
@@ -180,6 +188,11 @@ public class PlayScreen implements Screen {
         //draw hud
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
+
+        if(gameOver()){
+            game.setScreen(new GameOverScreen(game));
+            dispose();
+        }
     }
 
     @Override
@@ -232,5 +245,12 @@ public class PlayScreen implements Screen {
                 items.add(new Mushroom(this, idef.position.x, idef.position.y));
             }
         }
+    }
+
+    public boolean gameOver(){
+        if(player.currentState == Mario.State.DEAD && player.getStateTimer() > 3){
+            return true;
+        }
+        return false;
     }
 }

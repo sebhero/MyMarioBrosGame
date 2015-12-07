@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import se.seb.mariobros.MarioBros;
 import se.seb.mariobros.screens.PlayScreen;
+import se.seb.mariobros.sprites.Mario;
 
 /**
  * Created by Sebastian Börebäck on 2015-12-07.
@@ -50,6 +51,18 @@ public class Goomba extends Enemy {
             setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
             setRegion(walkAnimation.getKeyFrame(statetime,true));
         }
+    }
+
+    @Override
+    public void onEnemyHit(Enemy enemy) {
+        if (enemy instanceof Turtle && ((Turtle) enemy).currentState == Turtle.State.MOVING_SHELL) {
+            setToDestroy =true;
+        }
+        else{
+            reverseVelocity(true, false);
+        }
+
+
     }
 
     @Override
@@ -95,15 +108,16 @@ public class Goomba extends Enemy {
     }
 
     @Override
+    public void hitOnHead(Mario mario) {
+        setToDestroy = true;
+        MarioBros.manager.get("audio/sound/stomp.wav", Sound.class).play();
+    }
+
+    @Override
     public void draw(Batch batch) {
         if (!destroyed || statetime < 1) {
             super.draw(batch);
         }
     }
 
-    @Override
-    public void hitOnHead() {
-        setToDestroy = true;
-        MarioBros.manager.get("audio/sound/stomp.wav", Sound.class).play();
-    }
 }
