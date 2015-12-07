@@ -8,10 +8,10 @@ import com.badlogic.gdx.physics.box2d.World;
 import se.seb.mariobros.MarioBros;
 import se.seb.mariobros.screens.PlayScreen;
 import se.seb.mariobros.sprites.Mario;
-
 /**
- * Created by brentaureli on 9/24/15.
+ * Created by Sebastian Börebäck on 2015-12-07.
  */
+
 public abstract class Item extends Sprite {
     protected PlayScreen screen;
     protected World world;

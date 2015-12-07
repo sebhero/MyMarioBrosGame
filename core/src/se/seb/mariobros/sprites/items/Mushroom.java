@@ -10,7 +10,7 @@ import se.seb.mariobros.sprites.Mario;
 import se.seb.mariobros.sprites.items.Item;
 
 /**
- * Created by brentaureli on 9/24/15.
+ * Created by Sebastian Börebäck on 2015-12-07.
  */
 public class Mushroom extends Item {
     public Mushroom(PlayScreen screen, float x, float y) {
